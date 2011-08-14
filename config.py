@@ -25,25 +25,29 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 ###
 
 import supybot.conf as conf
+import supybot.utils as utils
 import supybot.registry as registry
 
 def configure(advanced):
-    # This will be called by supybot to configure this module.  advanced is
-    # a bool that specifies whether the user identified himself as an advanced
-    # user or not.  You should effect your configuration by manipulating the
-    # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('TwitterRelay', True)
+    conf.registerPlugin('TwitterStream', True)
 
+TwitterStream = conf.registerPlugin('TwitterStream')
 
-TwitterRelay = conf.registerPlugin('TwitterRelay')
-# This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(TwitterRelay, 'someConfigVariableName',
-#     registry.Boolean(False, """Help for someConfigVariableName."""))
+conf.registerGroup(TwitterStream, 'account')
+conf.registerGlobalValue(TwitterStream.account, 'username',
+    registry.String("username", """Twitter username"""))
+conf.registerGlobalValue(TwitterStream.account, 'password',
+    registry.String("password", """Twitter password"""))
 
+conf.registerGlobalValue(TwitterStream, 'autostart',
+    registry.Boolean(False, """If true, will autostart streaming upon bot
+    startup."""))
+
+conf.registerGlobalValue(TwitterStream, 'following',
+    registry.SpaceSeparatedSetOfStrings([], """Determines who the bot follows"""))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
